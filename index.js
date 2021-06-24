@@ -2,7 +2,7 @@ const exp = require("constants");
 const express = require("express");
 const userRouter = require('./users/users.routes')
 
-const PORT = process.env.port || 5500;
+const PORT = process.env.PORT || 5500;
 class Server {
 
     constructor(){
