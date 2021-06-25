@@ -1,17 +1,18 @@
-const express = require("express")
-const userRouter = require("./users/users.routes")
-const mongoose = require("mongoose")
-const dotenv = require("dotenv")
+const express = require("express");
+const userRouter = require("./users/users.routes");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const cors = require("cors");
 
-dotenv.config()
+dotenv.config();
 
-const uriDb = process.env.DB_URL
+const uriDb = process.env.DB_URL;
 
 const PORT = process.env.PORT || 5500;
 
 class Server {
   constructor() {
-    this.server = null
+    this.server = null;
   }
 
   connectToDb() {
@@ -22,34 +23,41 @@ class Server {
         useCreateIndex: true,
       })
       .then(() => {
-          console.log(`Server running. Use our API on port: ${PORT}`)
+        console.log(`Server running. Use our API on port: ${PORT}`);
       })
-      .catch((err) => console.log(`Server not running. Error message: ${err.message}`))
+      .catch((err) =>
+        console.log(`Server not running. Error message: ${err.message}`),
+      );
   }
 
   start() {
-    this.server = express()
-    this.initMiddlewares()
-    this.connectToDb()
-    this.initRoutes()
-    this.listen()
+    this.server = express();
+    this.initMiddlewares();
+    this.connectToDb();
+    this.initRoutes();
+    this.listen();
   }
 
   initMiddlewares() {
-    this.server.use(express.json())
+    this.server.use(express.json());
+    this.server.use(
+      cors({
+        origin: "*",
+      }),
+    );
   }
 
   initRoutes() {
-    this.server.use("/blog", userRouter)
+    this.server.use("/blog", userRouter);
   }
 
   listen() {
     this.server.listen(PORT, () => {
-      console.log(`Server is listening on port ${PORT}`)
-    })
+      console.log(`Server is listening on port ${PORT}`);
+    });
   }
 }
 
-const server = new Server()
+const server = new Server();
 
-server.start()
+server.start();
