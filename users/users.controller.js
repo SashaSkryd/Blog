@@ -1,29 +1,19 @@
-const User = require('./Users');
+const User = require("./Users");
 const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 class UserController {
-
-    async createUser(req,res){
-        // try {
-        //     const {body}=req;
-        //     const user = await User.create({...body});
-        //     res.json(user)   
-        // }
-        // catch(error){
-        //     res.send(error.message)
-        // }
-    
-
-// ========================================================================
-
+  async createUser(req, res) {
     const { body } = req;
 
     const hashedPassword = await bcrypt.hash(body.password, 14);
     const tokenToVerify = await uuidv4();
-  
+
     const isEmailExist = await User.findOne({
       email: body.email,
     });
@@ -41,7 +31,7 @@ class UserController {
     // )
     //   .create(body)
     //   .then((buffer) => fs.writeFileSync(`tmp/${avatarTitle}.png`, buffer));
-  
+
     // const files = await minifyImage([`tmp/${avatarTitle}.png`], {
     //   destination: "public/images",
     //   plugins: [
@@ -50,9 +40,9 @@ class UserController {
     //     }),
     //   ],
     // });
-  
+
     // const [ava] = files;
-  
+
     // let avatarURL = "";
     // await cloudinary.uploader.upload(
     //   ava.destinationPath,
@@ -60,17 +50,17 @@ class UserController {
     //     avatarURL = result.secure_url;
     //   },
     // );
-  
+
     // await unlink(`tmp/${avatarTitle}.png`);
     // await unlink(ava.destinationPath);
-  
+
     const user = await User.create({
       ...body,
-    //   avatarURL,
+      //   avatarURL,
       password: hashedPassword,
       verificationToken: tokenToVerify,
     });
-  
+
     if (!user) {
       return res.status(500).send({ message: "Something went wrong" });
     }
@@ -84,8 +74,78 @@ class UserController {
     res.status(201).json({
       ...data,
     });
-    };
+  }
 
+  async loginUser(req, res) {
+    const { email, password } = req.body;
+    let user = await User.findOne({
+      email,
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Not autorized" });
+    }
+
+    const token = jwt.sign(
+      {
+        userID: user._id,
+      },
+      process.env.JWT_SECRET,
+    );
+
+    const userNew = await User.findOneAndUpdate(
+      { email },
+      { $set: { token } },
+      {
+        new: true,
+      },
+    );
+
+    return res
+      .status(201)
+      .json({ name: userNew.name, email: userNew.email, token: userNew.token });
+  }
+
+  async logoutUser(req, res) {
+    const {
+      body: { email },
+    } = req;
+    const token = "";
+    await User.findOneAndUpdate({ email }, { $set: { token } }, { new: true });
+
+    return res.status(200).send("OK");
+  }
+
+  async currentUser(req, res) {
+    const { name } = req.user;
+    return res.json({ name }).status(200);
+  }
+
+  async authorization(req, res, next) {
+    const authHeader = req.get("Authorization");
+    if (!authHeader) {
+      return res.status(401);
+    }
+
+    const token = authHeader.replace("Bearer ", "");
+    const payload = await jwt.verify(token, process.env.JWT_SECRET);
+    const { userID } = payload;
+    const user = await User.findById(userID);
+
+    if (!user) {
+      return res.status(401);
+    }
+
+    req.user = user;
+
+    next();
+  }
 }
 
-module.exports = new UserController;
+module.exports = new UserController();
