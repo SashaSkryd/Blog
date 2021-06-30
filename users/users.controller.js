@@ -52,7 +52,7 @@ class UserController {
     // );
 
     // await unlink(`tmp/${avatarTitle}.png`);
-    // await unlink(ava.destinationPath);
+    // await unlink(ava.destinationPath)
 
     const user = await User.create({
       ...body,
@@ -66,11 +66,29 @@ class UserController {
     }
     // TODO: SEND VERIFICATION ROUTE//
     // await sendVerificationEmail(body.email, tokenToVerify);
+
+    const token = jwt.sign(
+      {
+        userID: user._id,
+      },
+      process.env.JWT_SECRET,
+    );
+
+    const userNew = await User.findByIdAndUpdate(
+       user._id ,
+      { $set: { token } },
+      {
+        new: true,
+      },
+    );
+
     const data = {
       id: user.id,
       email: user.email,
       name: user.name,
+      token: userNew.token,
     };
+    
     res.status(201).json({
       ...data,
     });
