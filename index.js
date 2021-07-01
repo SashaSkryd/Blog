@@ -40,7 +40,7 @@ class Server {
 
   initMiddlewares() {
     this.server.use(express.json());
-    app.use(cors());
+    this.server.use(cors({origin: "*"}));
   }
 
   initRoutes() {
