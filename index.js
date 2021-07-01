@@ -40,7 +40,7 @@ class Server {
 
   initMiddlewares() {
     this.server.use(express.json());
-    this.server.use(cors({origin: "https://nifty-hopper-033201.netlify.app"}));
+    this.server.use(cors({origin: "*"}));
   }
 
   initRoutes() {
