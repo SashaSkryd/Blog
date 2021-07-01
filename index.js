@@ -42,7 +42,7 @@ class Server {
     this.server.use(express.json());
     this.server.use(
       cors({
-        origin: "*",
+        origin: "https://nifty-hopper-033201.netlify.app",
       }),
     );
   }
