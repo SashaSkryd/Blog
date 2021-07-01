@@ -67,31 +67,38 @@ class UserController {
     // TODO: SEND VERIFICATION ROUTE//
     // await sendVerificationEmail(body.email, tokenToVerify);
 
-    const token = jwt.sign(
-      {
-        userID: user._id,
-      },
-      process.env.JWT_SECRET,
-    );
-
+    async function getToken (){
+      const token = await jwt.sign(
+        {
+          userID: user._id,
+        },
+        process.env.JWT_SECRET,
+      );
+  
+      return token
+    }
+ 
     const userNew = await User.findByIdAndUpdate(
       user._id,
-      { $set: { token } },
+      { $set: { getToken() } },
       {
         new: true,
       },
     );
+      async function getData(){
+        const data = {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          token: userNew.token,
+        };
+        return data
+      }
+ 
 
-    const data = {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      token: userNew.token,
-    };
-
-    res.status(201).json({
-      ...data,
-    });
+    res.status(201).json(
+      getData()
+    );
   }
 
   async loginUser(req, res) {
