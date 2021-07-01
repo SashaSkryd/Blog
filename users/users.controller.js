@@ -67,26 +67,26 @@ class UserController {
     // TODO: SEND VERIFICATION ROUTE//
     // await sendVerificationEmail(body.email, tokenToVerify);
 
-    // const token = jwt.sign(
-    //   {
-    //     userID: user._id,
-    //   },
-    //   process.env.JWT_SECRET,
-    // );
+    const token = jwt.sign(
+      {
+        userID: user._id,
+      },
+      process.env.JWT_SECRET,
+    );
 
-    // const userNew = await User.findByIdAndUpdate(
-    //   user._id,
-    //   { $set: { token } },
-    //   {
-    //     new: true,
-    //   },
-    // );
+    const userNew = await User.findByIdAndUpdate(
+      user._id,
+      { $set: { token } },
+      {
+        new: true,
+      },
+    );
 
     const data = {
       id: user.id,
       email: user.email,
       name: user.name,
-      // token: userNew.token,
+      token: userNew.token,
     };
 
     res.status(201).json({
@@ -95,9 +95,7 @@ class UserController {
   }
 
   async loginUser(req, res) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+
     const { email, password } = req.body;
     let user = await User.findOne({
       email,
