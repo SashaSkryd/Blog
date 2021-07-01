@@ -75,7 +75,7 @@ class UserController {
     );
 
     const userNew = await User.findByIdAndUpdate(
-       user._id ,
+      user._id,
       { $set: { token } },
       {
         new: true,
@@ -88,7 +88,7 @@ class UserController {
       name: user.name,
       token: userNew.token,
     };
-    
+
     res.status(201).json({
       ...data,
     });
