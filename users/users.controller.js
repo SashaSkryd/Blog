@@ -152,7 +152,7 @@ class UserController {
     }
 
     const token = authHeader.replace("Bearer ", "");
-    const payload = await jwt.verify(token, process.env.JWT_SECRET);
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
     const { userID } = payload;
     const user = await User.findById(userID);
 
