@@ -41,7 +41,9 @@ class Server {
 
   initMiddlewares() {
     this.server.use(express.json());
-    this.server.use(cors({ origin: "*" }));
+    this.server.use(
+      cors({ origin: "https://blog-frontend-practice-ne.herokuapp.com/" }),
+    );
   }
 
   initRoutes() {
