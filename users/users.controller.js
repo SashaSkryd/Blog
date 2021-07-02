@@ -147,7 +147,7 @@ class UserController {
 
   async authorization(req, res, next) {
     const authHeader = req.get("Authorization");
-    if (!authHeader) {
+    if (authHeader === null) {
       return res.status(401);
     }
 
