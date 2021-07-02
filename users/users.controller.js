@@ -9,6 +9,12 @@ dotenv.config();
 
 class UserController {
   async createUser(req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization, Content-Length, X-Requested-With",
+    );
     const { body } = req;
 
     const hashedPassword = await bcrypt.hash(body.password, 14);
@@ -95,7 +101,12 @@ class UserController {
   }
 
   async loginUser(req, res) {
-
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization, Content-Length, X-Requested-With",
+    );
     const { email, password } = req.body;
     let user = await User.findOne({
       email,
@@ -147,6 +158,12 @@ class UserController {
   }
 
   async authorization(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization, Content-Length, X-Requested-With",
+    );
     const authHeader = req.get("Authorization");
     if (!authHeader) {
       return res.status(401);
