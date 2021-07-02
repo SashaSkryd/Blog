@@ -1,5 +1,6 @@
 const express = require("express");
 const userRouter = require("./users/users.routes");
+const postRouter = require("./posts/post.router");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
@@ -40,11 +41,12 @@ class Server {
 
   initMiddlewares() {
     this.server.use(express.json());
-    this.server.use(cors({origin: "*"}));
+    this.server.use(cors({ origin: "*" }));
   }
 
   initRoutes() {
-    this.server.use("/blog", userRouter);
+    this.server.use("/users", userRouter);
+    this.server.use("/posts", postRouter);
   }
 
   listen() {
