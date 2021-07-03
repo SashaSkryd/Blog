@@ -45,7 +45,7 @@ class Server {
   }
 
   initRoutes() {
-    this.server.use("/users", userRouter);
+    this.server.use("/users/", userRouter);
     this.server.use("/posts", postRouter);
   }
 
