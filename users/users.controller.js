@@ -12,7 +12,7 @@ class UserController {
     const { body } = req;
 
     const hashedPassword = await bcrypt.hash(body.password, 14);
-    const tokenToVerify = await uuidv4();
+    const tokenToVerify = uuidv4();
 
     const isEmailExist = await User.findOne({
       email: body.email,
