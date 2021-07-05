@@ -6,13 +6,13 @@ const {
   authorization,
 } = require("./users.controller");
 const { Router } = require("express");
-const cors = require("cors");
+// const cors = require("cors");
 
 const userRouter = Router();
 
-userRouter.post("/", cors(), createUser);
-userRouter.put("/", cors(), loginUser);
-userRouter.patch("/", cors(), logoutUser);
-userRouter.get("/", cors(), authorization, currentUser);
+userRouter.post("/", createUser);
+userRouter.put("/", loginUser);
+userRouter.patch("/", logoutUser);
+userRouter.get("/", authorization, currentUser);
 
 module.exports = userRouter;
