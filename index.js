@@ -43,11 +43,11 @@ class Server {
     this.server.use(express.json());
     // this.server.use("*",cors());
     // this.server.options("*", cors());
-    this.server.use(
-      cors({
-        origin: "*",
-      }),
-    );
+    // this.server.use(
+    //   cors({
+    //     origin: "*",
+    //   }),
+    // );
   }
 
   initRoutes() {
