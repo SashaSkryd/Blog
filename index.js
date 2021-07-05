@@ -3,7 +3,7 @@ const userRouter = require("./users/users.routes");
 const postRouter = require("./posts/post.router");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-// const cors = require("cors");
+const cors = require("cors");
 
 dotenv.config();
 
@@ -43,11 +43,11 @@ class Server {
     this.server.use(express.json());
     // this.server.use("*",cors());
     // this.server.options("*", cors());
-    // this.server.use(
-    //   cors({
-    //     origin: "*",
-    //   }),
-    // );
+    this.server.use(
+      cors({
+        origin: "*",
+      }),
+    );
   }
 
   initRoutes() {
