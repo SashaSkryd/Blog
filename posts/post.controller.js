@@ -50,7 +50,7 @@ class PostController {
   async getPostAuthor(req, res) {
     const postAuthor = req.params.postAuthor;
     const getposts = await Post.find({});
-    const posts = getposts.filter((el) => el.author === postAuthor);
+    const posts = getposts.filter((el) => el.email === postAuthor);
     res.json(posts).status(200);
   }
 
