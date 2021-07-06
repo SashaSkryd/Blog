@@ -141,8 +141,8 @@ class UserController {
   }
 
   async currentUser(req, res) {
-    const { name } = req.user;
-    return res.json({ name }).status(200);
+    const { name, email } = req.user;
+    return res.json({ name, email }).status(200);
   }
 
   async authorization(req, res, next) {
