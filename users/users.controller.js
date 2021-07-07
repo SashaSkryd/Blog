@@ -127,7 +127,7 @@ class UserController {
 
     return res
       .status(201)
-      .json({ name: userNew.name, email: userNew.email, token: userNew.token });
+      .json({id:userNew.id, name: userNew.name, token: userNew.token });
   }
 
   async logoutUser(req, res) {
