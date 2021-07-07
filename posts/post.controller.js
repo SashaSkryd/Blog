@@ -11,7 +11,7 @@ class PostController {
     }
 
     try {
-      const post = await Post.create({ ...body, author: user.name });
+      const post = await Post.create({ ...body, author: user._id });
       res.status(200).json(post);
     } catch (error) {
       res.status(500).send("error");
@@ -25,7 +25,7 @@ class PostController {
     } = req;
     const { user } = req;
 
-    if (body.author !== user.name) {
+    if (body.author !== user.id) {
       res.status(403);
     }
 
@@ -50,7 +50,7 @@ class PostController {
   async getPostAuthor(req, res) {
     const postAuthor = req.params.postAuthor;
     const getposts = await Post.find({});
-    const posts = getposts.filter((el) => el.email === postAuthor);
+    const posts = getposts.filter((el) => el.author === postAuthor);
     res.json(posts).status(200);
   }
 
@@ -59,10 +59,9 @@ class PostController {
       params: { postId },
     } = req;
     const post = await Post.findById(postId);
-    const name = post.author;
-    console.log(req.user.name, name);
+    const id = post.author;
 
-    if (req.user.name !== name) {
+    if (req.user.id !== id) {
       return res.status(403).send("Not available!");
     }
 
