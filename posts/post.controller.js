@@ -56,12 +56,12 @@ class PostController {
   async deletePost(req, res) {
     const {
       params: { postId },
-      user: {name,userId}
+      user: {name,id}
     } = req;
     const post = await Post.findById(postId);
-    const id = post.author;
+    const authorId = post.author;
 
-    if (userId !== id) {
+    if (id !== authorId) {
       return res.status(403).send("Not available!");
     }
 
