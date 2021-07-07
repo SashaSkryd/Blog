@@ -6,10 +6,9 @@ class PostController {
     const { body } = req;
     const { user } = req;
 
-    if (body.author !== user.name) {
+    if (body.author !== user._id) {
       res.status(403);
     }
-
     try {
       const post = await Post.create({ ...body, author: user._id, authorName: user.name });
       res.status(200).json(post);

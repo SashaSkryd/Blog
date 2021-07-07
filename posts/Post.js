@@ -7,6 +7,7 @@ const PostSchema = new Schema({
   date: String,
   text: String,
   images: String,
+  authorName: String,
 });
 
 const Post = mongoose.model("Post", PostSchema);
