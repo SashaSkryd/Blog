@@ -56,17 +56,21 @@ class PostController {
   async deletePost(req, res) {
     const {
       params: { postId },
+      user: {name,userId}
     } = req;
     const post = await Post.findById(postId);
     const id = post.author;
 
-    if (req.user.id !== id) {
+    if (userId !== id) {
       return res.status(403).send("Not available!");
     }
 
     const deletePost = await Post.findByIdAndRemove(postId);
 
-    res.json(deletePost).status(200);
+    const getposts = await Post.find({});
+    const posts = getposts.filter((el) => el.author === name);
+
+    res.json(posts).status(200);
   }
 }
 
