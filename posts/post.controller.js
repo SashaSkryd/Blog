@@ -11,7 +11,7 @@ class PostController {
     }
 
     try {
-      const post = await Post.create({ ...body, author: user._id });
+      const post = await Post.create({ ...body, author: user._id, authorName: user.name });
       res.status(200).json(post);
     } catch (error) {
       res.status(500).send("error");
