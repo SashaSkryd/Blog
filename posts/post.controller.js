@@ -68,7 +68,7 @@ class PostController {
     const deletePost = await Post.findByIdAndRemove(postId);
 
     const getposts = await Post.find({});
-    const posts = getposts.filter((el) => el.author === name);
+    const posts = getposts.filter((el) => el.author === id);
 
     res.json(posts).status(200);
   }
